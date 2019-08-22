@@ -5,6 +5,11 @@
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
     <style>
+
+      body {
+        font-family: verdana;
+      }
+
       li {
         display: flex;
         flex-direction: column;
@@ -12,8 +17,8 @@
 
       select {
         height: 2rem;
-
       }
+
     </style>
   </head>
   <body>
@@ -51,7 +56,7 @@
         }
         const user = (await axios.get(`${API}/users/random`)).data;
         storage.setItem('userId', user.id);
-        return  user;
+        return user;
       };
 
       class App extends Component {
@@ -96,7 +101,8 @@
           const { user, companies, following } = this.state;
           return (
             <div>
-              <h1>Welcome { user.fullName }</h1>
+              <h1>Acme Company Follower</h1>
+              <h2>You ({ user.fullName }) are following </h2>
               <ul>
                 {
                   companies.map(company => <CompanyFollowing
