@@ -4,7 +4,12 @@
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-router-dom/5.0.1/react-router-dom.js"></script>
+    <style>
+      li {
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
   </head>
   <body>
     <div id='root'>
@@ -15,29 +20,31 @@
       const root = document.querySelector('#root');
       const API = 'https://acme-users-api-rev.herokuapp.com/api'
 
-      // const CompanyFollowing = ( { company, followed } ) => {
-      //   return (
-
-      //   )
-      // }
+      const CompanyFollowing = ( { companies } ) => {
+        return (
+          companies.map(company =>
+          <li key={company.id}>
+            {company.name}
+          </li>)
+        );
+      };
 
       const fetchUser = async ()=> {
-      const storage = window.localStorage;
-      const userId = storage.getItem('userId');
-      if(userId){
-        try {
-          return (await axios.get(`${API}/users/detail/${userId}`)).data;
+        const storage = window.localStorage;
+        const userId = storage.getItem('userId');
+        if(userId){
+          try {
+            return (await axios.get(`${API}/users/detail/${userId}`)).data;
+          }
+          catch(ex){
+            storage.removeItem('userId');
+            return fetchUser();
+          }
         }
-        catch(ex){
-          storage.removeItem('userId');
-          return fetchUser();
-        }
-      }
-      const user = (await axios.get(`${API}/users/random`)).data;
-      storage.setItem('userId', user.id);
-      return  user;
-    };
-
+        const user = (await axios.get(`${API}/users/random`)).data;
+        storage.setItem('userId', user.id);
+        return  user;
+      };
 
       class App extends Component {
         constructor() {
@@ -58,6 +65,7 @@
           ]
           this.setState({user, companies, following });
         }
+
         render() {
           const { user, companies, following } = this.state;
           return (
@@ -65,20 +73,15 @@
               <h1>Welcome { user.fullName }</h1>
               <ul>
                 {
-                  companies.map( company => <li key = { company.id }>
-                  { company.name }
-                  {
-                    following.find( companyId === company.id) ? 'Following' : 'Not'
-                  }
-                  </li>)
+                  <CompanyFollowing companies={ companies } />
                 }
               </ul>
             </div>
           );
         }
       }
-      render(<App />, root);
 
+      render(<App />, root);
 
     </script>
   </body>
