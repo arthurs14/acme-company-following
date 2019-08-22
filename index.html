@@ -91,6 +91,7 @@
           }
           const following = (await axios(`${API}/users/${user.id}/followingCompanies`)).data;
           console.log(following);
+          
           this.setState({ following }); // refer to select onChange prework video
         }
 
