@@ -12,8 +12,7 @@
     </style>
   </head>
   <body>
-    <div id='root'>
-    </div>
+    <div id='root'></div>
     <script type='text/babel'>
       const { render } = ReactDOM;
       const { createElement, Component } = React;
@@ -25,6 +24,9 @@
           companies.map(company =>
           <li key={company.id}>
             {company.name}
+            <select>
+
+            </select>
           </li>)
         );
       };
