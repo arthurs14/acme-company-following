@@ -71,12 +71,15 @@
         }
 
         async onChange(user, company, followed, rating) {
-          const followingCompany = (await axios(`${API}/users/${user.id}/followingCompanies`)).data;
-          console.log(followingCompany);
+
+          // if(following.length === 5) {
+
+          // }
 
           if (followed) {
             if (rating) {
               //axios update - then set the state
+              const updated = await axios.put(`${API}/users/${user.id}/followingCompanies/${followed.id}`, {rating: rating, companyId: company.id});
               console.log('update it');
             } else {
               // axios delete - then set the state
@@ -86,7 +89,9 @@
             // axios post - then set the state
             console.log('create it');
           }
-          //this.setState(change); // refer to select onChange prework video
+          const following = (await axios(`${API}/users/${user.id}/followingCompanies`)).data;
+          console.log(following);
+          this.setState({ following }); // refer to select onChange prework video
         }
 
         async componentDidMount () {
